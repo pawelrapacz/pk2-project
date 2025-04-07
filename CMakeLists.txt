@@ -4,7 +4,6 @@ project(MapaMiasta VERSION 2.0.1 LANGUAGES CXX)
 
 set(SOURCE_FILES
     src/main.cpp
-    src/CityGraph.cpp
 )
 
 
