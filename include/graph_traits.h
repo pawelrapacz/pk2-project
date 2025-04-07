@@ -15,5 +15,5 @@ namespace graph_traits
 
     template<typename CondTp, typename Tp = void>
     using enable_if_not_void_t = typename enable_if_not_void<CondTp, Tp>::type;
-
-} // namespace GraphTraits
+    
+} // namespace graph_traits

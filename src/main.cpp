@@ -98,7 +98,7 @@ int main(int argc, char** argv) {
     for (auto& i : g2.adjacent("Szkoła"))
         std::cout << i << '\n';
 
-    std::cout << g2.getVertexValue("Szpital").x;
+    std::cout << g2["Szpital"].x;
 
     return 0;
 }
