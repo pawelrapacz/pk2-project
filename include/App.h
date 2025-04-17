@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include <filesystem>
 #include "clipper.hpp"
 
 namespace citymap
@@ -10,24 +10,23 @@ namespace citymap
     public:
         struct CliOptions {
             bool help;
-            std::string coordinates;
-            std::string connectionsTable;
-            std::string traces;
-            std::string outputFile;
+            std::filesystem::path coordinates;
+            std::filesystem::path connectionsTable;
+            std::filesystem::path traces;
+            std::filesystem::path outputFile;
         };
 
-        App(int, char**);
+        App(CLI::arg_count, CLI::args);
         ~App() = default;
 
         void run();
 
-    protected:
+    private:
         inline void handleCli();
 
-
     private:
-        const int argc_;
-        char** argv_;
+        const CLI::arg_count argc_;
+        const CLI::args argv_;
         CLI::clipper cli_;
         CliOptions options_;
     };

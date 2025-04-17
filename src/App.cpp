@@ -3,57 +3,51 @@
 
 using namespace citymap;
 
-
-citymap::App::App(int argc, char ** argv)
-    : argc_(argc), argv_(argv) {}
-
-
-void App::run()
-{
-    handleCli();
-}
-
-
-static inline void initCliOptions(CLI::clipper &c,  App::CliOptions &o) {
+static inline void initCliOptions(CLI::clipper& c, App::CliOptions& o) {
     c.name("MapaMiasta").author("Paweł Rapacz");
+    c.description("Determines the shortest path between two points in the city.");
 
     c.help_flag("--help", "-h")
         .set(o.help);
 
-    c.add_option<std::string>("-coor")
+    c.add_option<std::filesystem::path>("-coor")
         .set("file", o.coordinates)
         .doc("Input with coordinates")
         .req();
 
-    c.add_option<std::string>("-tab")
+    c.add_option<std::filesystem::path>("-tab")
         .set("file", o.connectionsTable)
         .doc("Input with connections table")
         .req();
 
-    c.add_option<std::string>("-q")
+    c.add_option<std::filesystem::path>("-q")
         .set("file", o.traces)
-        .doc("Input with traces")
+        .doc("Input with path queries")
         .req();
 
-    c.add_option<std::string>("-out")
+    c.add_option<std::filesystem::path>("-out")
         .set("file", o.outputFile)
         .doc("Output file")
         .req();
 }
 
-
-inline void App::handleCli()
+citymap::App::App(CLI::arg_count argc, CLI::args argv)
+    : argc_(argc), argv_(argv)
 {
     initCliOptions(cli_, options_);
+}
 
+void App::run() {
+    handleCli();
+}
+
+inline void App::handleCli() {
     if (!cli_.parse(argc_, argv_)) {
         for (auto &i : cli_.wrong())
             std::cout << i << '\n';
-
-        return;
     }
 
-    if (options_.help) {
+    if (options_.help or cli_.no_args()) {
         std::cout << cli_.make_help();
     }
 }
