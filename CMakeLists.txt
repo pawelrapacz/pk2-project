@@ -16,11 +16,13 @@ add_executable(${PROJECT_NAME}
     include/graph_traits.h
     include/UndirectedGraph.h
     include/Point.h
+    include/Path.h
     include/CityGraph.h
     include/metrics.h
 
     src/main.cpp
     src/App.cpp
+    src/Path.cpp
     src/metrics.cpp
 )
 
