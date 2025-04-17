@@ -2,10 +2,10 @@
 
 #include <string>
 
-#include "UndirectedGraph.h"
+#include "DirectedGraph.h"
 #include "Point.h"
 
 namespace citymap
 {
-    using CityGraph = UndirectedGraph<std::string, Point>;
+    using CityGraph = graphs::DirectedGraph<std::string, Point>;
 } // namespace citymap

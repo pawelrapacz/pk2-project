@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 4.0.1)
-project(MapaMiasta VERSION 1.0.0
+project(citymap VERSION 1.0.0
                    DESCRIPTION "pk-project"
                    LANGUAGES CXX)
 
@@ -9,21 +9,21 @@ endif()
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 
-add_subdirectory(external)
+add_subdirectory(external/clipper)
+add_subdirectory(lib/graphs)
+add_subdirectory(lib/metrics)
 
 add_executable(${PROJECT_NAME}
-    include/App.h
-    include/graph_traits.h
-    include/UndirectedGraph.h
-    include/Point.h
-    include/Path.h
-    include/CityGraph.h
-    include/metrics.h
-
     src/main.cpp
-    src/App.cpp
-    src/Path.cpp
-    src/metrics.cpp
+
+    src/App/App.cpp
+    src/App/App.h
+
+    src/CityGraph/Point.h
+    src/CityGraph/CityGraph.h
+
+    src/Path/Path.h
+    src/Path/Path.cpp
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -32,8 +32,19 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_EXTENSIONS OFF
 )
 
-target_include_directories(${PROJECT_NAME} PRIVATE include)
-target_link_libraries(${PROJECT_NAME} PRIVATE clipper)
+target_include_directories(${PROJECT_NAME} PRIVATE
+    src/
+    src/App/
+    src/Path/
+    src/CityGraph/
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    clipper
+    graphs
+    metrics
+)
+
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror --pedantic-errors)
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE
@@ -46,6 +57,5 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE
     <string>
     <string_view>
     <iostream>
-    <cmath>
     <cstring>
 )
