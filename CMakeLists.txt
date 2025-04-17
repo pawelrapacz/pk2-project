@@ -1,44 +1,49 @@
-cmake_minimum_required(VERSION 3.28.1)
+cmake_minimum_required(VERSION 4.0.1)
+project(MapaMiasta VERSION 1.0.0
+                   DESCRIPTION "pk-project"
+                   LANGUAGES CXX)
 
-project(MapaMiasta VERSION 2.0.1 LANGUAGES CXX)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
+endif()
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
-set(SOURCE_FILES
+
+add_subdirectory(external)
+
+add_executable(${PROJECT_NAME}
+    include/App.h
+    include/graph_traits.h
+    include/UndirectedGraph.h
+    include/Point.h
+    include/CityGraph.h
+    include/metrics.h
+
     src/main.cpp
     src/App.cpp
     src/metrics.cpp
 )
 
-
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-
 set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 23
     CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS OFF
 )
 
-target_include_directories(${PROJECT_NAME} PRIVATE
-    external/
-    include/
+target_include_directories(${PROJECT_NAME} PRIVATE include)
+target_link_libraries(${PROJECT_NAME} PRIVATE clipper)
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror --pedantic-errors)
+
+target_precompile_headers(${PROJECT_NAME} PRIVATE
+    <type_traits>
+    <memory>
+    <vector>
+    <unordered_map>
+    <filesystem>
+    <algorithm>
+    <string>
+    <string_view>
+    <iostream>
+    <cmath>
+    <cstring>
 )
-
-
-# pedantic errors
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    add_compile_options(-Wall -Wextra -Wpedantic -Werror -pedantic-errors)
-endif()
-
-
-
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Debug")
-endif()
-
-if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    message("-- Build type: Debug")
-elseif(${CMAKE_BUILD_TYPE} STREQUAL "Release")
-    message("-- Build type: Release")
-    target_link_options(${PROJECT_NAME} PRIVATE -static)
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-        COMPILE_FLAGS "-O3"
-    )
-endif()

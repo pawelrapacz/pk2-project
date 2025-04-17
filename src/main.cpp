@@ -3,7 +3,7 @@
 #include "CityGraph.h"
 #include "UndirectedGraph.h"
 
-int main(int argc, char** argv) {
+int main(/* int argc, char** argv */) {
     bool help;
     std::string coordinates;
     std::string connectionsTable;
