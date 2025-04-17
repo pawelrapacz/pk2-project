@@ -47,7 +47,7 @@ inline void App::handleCli()
     initCliOptions(cli_, options_);
 
     if (!cli_.parse(argc_, argv_)) {
-        for (auto &i : cli_.wrong)
+        for (auto &i : cli_.wrong())
             std::cout << i << '\n';
 
         return;
