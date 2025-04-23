@@ -6,7 +6,7 @@
 #include <vector>
 #include <algorithm>
 
-namespace graph
+namespace graphs
 {
     template<typename Key, typename Value = void>
     class GraphBase
@@ -104,6 +104,6 @@ namespace graph
         }
 
     protected:
-        vertices_map verticies_;
+        vertices_map vertices_;
     };
 } // namespace graph
