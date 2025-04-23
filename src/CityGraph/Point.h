@@ -1,13 +1,12 @@
 #pragma once
+#include "metrics.h"
 
 namespace citymap
 {
-    struct Point
+    struct Point : public metrics::Point2
     {
-        int x, y;
-
         Point() = default;
-        Point(int x, int y) : x(x), y(y) {}
+        Point(int x, int y) : Point2(x, y) {}
         ~Point() = default;
     };
 } // namespace citymap

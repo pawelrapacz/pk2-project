@@ -1,10 +1,13 @@
 #pragma once
 
-#include "../../../src/CityGraph/Point.h" // needs fixing
-
 namespace metrics
 {
-    inline double euclidean(citymap::Point,  citymap::Point);
+    struct Point2
+    {
+        int x, y;
+    };
 
-    inline double manhattan(citymap::Point, citymap::Point);
+    inline double euclidean(Point2,  Point2);
+
+    inline double manhattan(Point2, Point2);
 } // namespace metrics
