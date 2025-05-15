@@ -1,5 +1,6 @@
 #include "App.h"
 #include <iostream>
+#include "FileHandler.h"
 
 using namespace citymap;
 
@@ -39,6 +40,10 @@ citymap::App::App(CLI::arg_count argc, CLI::args argv)
 
 void App::run() {
     handleCli();
+    FileHandler fh(options_);
+    fh.loadCoordinates(graph_);
+    fh.loadConnections(graph_);
+    // fh.loadQueries();
 }
 
 inline void App::handleCli() {

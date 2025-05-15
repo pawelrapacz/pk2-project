@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include "clipper.hpp"
+#include "CityGraph.h"
 
 namespace citymap
 {
@@ -29,5 +30,6 @@ namespace citymap
         const CLI::args argv_;
         CLI::clipper cli_;
         CliOptions options_;
+        CityGraph graph_;
     };
 } // namespace citymap
