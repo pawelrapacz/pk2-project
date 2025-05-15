@@ -50,7 +50,7 @@ namespace graphs
         bool constains(const key_type& vertex) const
         { return vertices_.contains(vertex); }
 
-        bool empty(const key_type& vertex) const noexcept
+        bool empty() const noexcept
         { return vertices_.empty(); }
 
         void clear() noexcept
