@@ -1,3 +1,5 @@
+.vscode/
+*.pdf
 [Bb]uild/
 
 [Dd][Oo][Cc][Ss]/*
