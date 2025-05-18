@@ -7,5 +7,7 @@
 
 namespace citymap
 {
+
     using CityGraph = graphs::DirectedGraph<std::string, Point>;
-} // namespace citymap
+
+}  // namespace citymap

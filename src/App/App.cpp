@@ -1,5 +1,7 @@
 #include "App.h"
+
 #include <iostream>
+
 #include "FileHandler.h"
 
 using namespace citymap;
@@ -8,8 +10,7 @@ static inline void initCliOptions(CLI::clipper& c, App::CliOptions& o) {
     c.name("MapaMiasta").author("Paweł Rapacz");
     c.description("Determines the shortest path between two points in the city.");
 
-    c.help_flag("--help", "-h")
-        .set(o.help);
+    c.help_flag("--help", "-h").set(o.help);
 
     c.add_option<std::filesystem::path>("-coor")
         .set("file", o.coordinates)
@@ -26,15 +27,11 @@ static inline void initCliOptions(CLI::clipper& c, App::CliOptions& o) {
         .doc("Input with path queries")
         .req();
 
-    c.add_option<std::filesystem::path>("-out")
-        .set("file", o.outputFile)
-        .doc("Output file")
-        .req();
+    c.add_option<std::filesystem::path>("-out").set("file", o.outputFile).doc("Output file").req();
 }
 
 citymap::App::App(CLI::arg_count argc, CLI::args argv)
-    : argc_(argc), argv_(argv)
-{
+    : argc_(argc), argv_(argv) {
     initCliOptions(cli_, options_);
 }
 
@@ -48,7 +45,7 @@ void App::run() {
 
 inline void App::handleCli() {
     if (!cli_.parse(argc_, argv_)) {
-        for (auto &i : cli_.wrong())
+        for (auto& i : cli_.wrong())
             std::cout << i << '\n';
     }
 

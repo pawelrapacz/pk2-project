@@ -1,13 +1,14 @@
 #pragma once
 
 #include <filesystem>
+
 #include "App.h"
 #include "CityGraph.h"
 
 namespace citymap
 {
-    class FileHandler
-    {
+
+    class FileHandler {
     public:
         FileHandler(const App::CliOptions&);
         ~FileHandler() = default;
@@ -18,7 +19,7 @@ namespace citymap
         // void writeOutput();
 
     private:
-        using path_type = std::filesystem::path;
+        using path_type     = std::filesystem::path;
         using path_type_ref = const std::filesystem::path&;
 
         path_type_ref coords;
@@ -26,4 +27,5 @@ namespace citymap
         path_type_ref quries;
         path_type_ref output;
     };
-} // namespace citymap
+
+}  // namespace citymap

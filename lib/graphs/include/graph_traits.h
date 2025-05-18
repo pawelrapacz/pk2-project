@@ -4,6 +4,7 @@
 
 namespace graph_traits
 {
+
     template<typename Tp>
     using is_not_void = std::negation<std::is_void<Tp>>;
 
@@ -15,5 +16,5 @@ namespace graph_traits
 
     template<typename CondTp, typename Tp = void>
     using enable_if_not_void_t = typename enable_if_not_void<CondTp, Tp>::type;
-    
-} // namespace graph_traits
+
+}  // namespace graph_traits

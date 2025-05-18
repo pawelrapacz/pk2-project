@@ -1,0 +1,6 @@
+build/**
+debug/**
+docs/**
+external/**
+*/.gitignore
+*/CmakeLists.txt

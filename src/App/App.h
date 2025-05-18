@@ -1,13 +1,14 @@
 #pragma once
 
 #include <filesystem>
-#include "clipper.hpp"
+
 #include "CityGraph.h"
+#include "clipper.hpp"
 
 namespace citymap
 {
-    class App
-    {
+
+    class App {
     public:
         struct CliOptions {
             bool help;
@@ -32,4 +33,5 @@ namespace citymap
         CliOptions options_;
         CityGraph graph_;
     };
-} // namespace citymap
+
+}  // namespace citymap
