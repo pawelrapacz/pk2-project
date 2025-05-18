@@ -3,11 +3,13 @@
 #include <iostream>
 
 #include "FileHandler.h"
+#include "config.h"
 
 using namespace citymap;
 
 static inline void initCliOptions(CLI::clipper& c, App::CliOptions& o) {
-    c.name("MapaMiasta").author("Paweł Rapacz");
+    c.name(PROJECT_NAME).author(PROJECT_AUTHOR);
+    c.version(PROJECT_VERSION);
     c.description("Determines the shortest path between two points in the city.");
 
     c.help_flag("--help", "-h").set(o.help);

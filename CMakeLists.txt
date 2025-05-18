@@ -3,6 +3,11 @@ project(citymap VERSION 1.0.0
                    DESCRIPTION "pk-project"
                    LANGUAGES CXX)
 
+set(PROJECT_AUTHOR "Paweł Rapacz")
+string(TIMESTAMP PROJECT_PUBLICATION_YEAR "%Y")
+
+configure_file(config.h.in config.h @ONLY)
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
 endif()
@@ -33,6 +38,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
+    ${PROJECT_BINARY_DIR}/
     src/
     src/App/
     src/Path/
