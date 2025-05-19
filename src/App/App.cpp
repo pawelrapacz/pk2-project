@@ -8,6 +8,7 @@
 using namespace citymap;
 
 static inline void initCliOptions(CLI::clipper& c, App::CliOptions& o) {
+    // clang-format off
     c.name(PROJECT_NAME).author(PROJECT_AUTHOR);
     c.version(PROJECT_VERSION);
     c.description("Determines the shortest path between two points in the city.");
@@ -15,21 +16,25 @@ static inline void initCliOptions(CLI::clipper& c, App::CliOptions& o) {
     c.help_flag("--help", "-h").set(o.help);
 
     c.add_option<std::filesystem::path>("-coor")
-        .set("file", o.coordinates)
+        .set("file", o.coordsFile)
         .doc("Input with coordinates")
         .req();
 
     c.add_option<std::filesystem::path>("-tab")
-        .set("file", o.connectionsTable)
+        .set("file", o.connectFile)
         .doc("Input with connections table")
         .req();
 
     c.add_option<std::filesystem::path>("-q")
-        .set("file", o.traces)
+        .set("file", o.queriesFile)
         .doc("Input with path queries")
         .req();
 
-    c.add_option<std::filesystem::path>("-out").set("file", o.outputFile).doc("Output file").req();
+    c.add_option<std::filesystem::path>("-out")
+        .set("file", o.outputFile)
+        .doc("Output file")
+        .req();
+    // clang-format on
 }
 
 citymap::App::App(CLI::arg_count argc, CLI::args argv)
@@ -39,10 +44,14 @@ citymap::App::App(CLI::arg_count argc, CLI::args argv)
 
 void App::run() {
     handleCli();
-    FileHandler fh(options_);
-    fh.loadCoordinates(graph_);
-    fh.loadConnections(graph_);
-    // fh.loadQueries();
+    loadInputs();
+}
+
+void App::loadInputs() {
+    FileHandler fh;
+    fh.loadCoordinates(options_.coordsFile, graph_);
+    fh.loadConnections(options_.connectFile, graph_);
+    // fh.loadQueries(options_.queriesFile);
 }
 
 inline void App::handleCli() {

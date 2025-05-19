@@ -24,6 +24,9 @@ add_executable(${PROJECT_NAME}
     src/App/App.cpp
     src/App/App.h
 
+    src/FileHandler/FileHandler.cpp
+    src/FileHandler/FileHandler.h
+
     src/CityGraph/Point.h
     src/CityGraph/CityGraph.h
 
@@ -42,6 +45,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     src/
     src/App/
     src/Path/
+    src/FileHandler/
     src/CityGraph/
 )
 

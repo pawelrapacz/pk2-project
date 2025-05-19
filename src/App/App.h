@@ -12,9 +12,9 @@ namespace citymap
     public:
         struct CliOptions {
             bool help;
-            std::filesystem::path coordinates;
-            std::filesystem::path connectionsTable;
-            std::filesystem::path traces;
+            std::filesystem::path coordsFile;
+            std::filesystem::path connectFile;
+            std::filesystem::path queriesFile;
             std::filesystem::path outputFile;
         };
 
@@ -22,9 +22,10 @@ namespace citymap
         ~App() = default;
 
         void run();
-
+        
     private:
         inline void handleCli();
+        inline void loadInputs();
 
     private:
         const CLI::arg_count argc_;

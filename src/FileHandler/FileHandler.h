@@ -1,6 +1,8 @@
 #pragma once
 
 #include <filesystem>
+#include <vector>
+#include <string>
 
 #include "App.h"
 #include "CityGraph.h"
@@ -9,23 +11,21 @@ namespace citymap
 {
 
     class FileHandler {
+        using FilePath     = std::filesystem::path;
+        using FilePathRef     = const std::filesystem::path&;
     public:
-        FileHandler(const App::CliOptions&);
+        FileHandler() = default;
         ~FileHandler() = default;
 
-        void loadCoordinates(CityGraph&);
-        void loadConnections(CityGraph&);
-        // void loadQueries();
-        // void writeOutput();
+        void loadCoordinates(FilePathRef, CityGraph&);
+        void loadConnections(FilePathRef, CityGraph&);
+        // void loadQueries(FilePathRef);
+        // void writeOutput(FilePathRef);
+        bool fail() const noexcept;
+        const std::vector<std::string>& errorList() const noexcept;
 
     private:
-        using path_type     = std::filesystem::path;
-        using path_type_ref = const std::filesystem::path&;
-
-        path_type_ref coords;
-        path_type_ref connect;
-        path_type_ref quries;
-        path_type_ref output;
+        std::vector<std::string> err_;
     };
 
 }  // namespace citymap
