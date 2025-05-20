@@ -3,7 +3,7 @@
 
 using namespace citymap;
 
-Map::PointId Map::addPoint(std::string_view name, Point val) {
+PointId Map::addPoint(std::string_view name, Point val) {
     auto id = nextId_++;
     if (points_.try_emplace(id, name, val).second) {
         nameIndex_.emplace(name, id);
@@ -13,7 +13,7 @@ Map::PointId Map::addPoint(std::string_view name, Point val) {
         return npnt;
 }
 
-Map::PointId Map::addPoint(PointId id, std::string_view name, Point val) {
+PointId Map::addPoint(PointId id, std::string_view name, Point val) {
     if (points_.try_emplace(id, name, val).second) {
         nameIndex_.emplace(name, id);
         if (nextId_ <= id) nextId_ = id + 1;
@@ -62,7 +62,7 @@ const std::string& Map::nameOf(PointId id) const {
     return points_.at(id).name;
 }
 
-Map::PointId Map::idOf(std::string_view name) const {
+PointId Map::idOf(std::string_view name) const {
     return nameIndex_.at(name);
 }
 

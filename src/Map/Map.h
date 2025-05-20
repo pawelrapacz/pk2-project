@@ -11,10 +11,10 @@
 
 namespace citymap
 {
+
     class Map
     {
     public:
-        using PointId = std::size_t;
         static constexpr PointId npnt = static_cast<PointId>(-1);
 
         Map() = default;

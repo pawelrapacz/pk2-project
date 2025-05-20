@@ -1,8 +1,10 @@
 #pragma once
 #include "metrics.h"
+#include <cstddef>
 
 namespace citymap
 {
+    using PointId = std::size_t;
 
     struct Point : public metrics::Point2 {
         Point() = default;
