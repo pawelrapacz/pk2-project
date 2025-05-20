@@ -3,8 +3,8 @@
 #include <cstddef>
 #include <string>
 #include <string_view>
-#include <unordered_set>
 #include <unordered_map>
+#include <unordered_set>
 
 #include "Path.h"
 #include "Point.h"
@@ -12,12 +12,11 @@
 namespace citymap
 {
 
-    class Map
-    {
+    class Map {
     public:
         static constexpr PointId npnt = static_cast<PointId>(-1);
 
-        Map() = default;
+        Map()  = default;
         ~Map() = default;
 
         PointId addPoint(std::string_view, Point);
@@ -28,18 +27,24 @@ namespace citymap
         void addConnection(PointId, PointId);
         void removeConnection(std::string_view, std::string_view);
         void removeConnection(PointId, PointId);
-        
-        
+        bool hasConnection(std::string_view, std::string_view) const;
+        bool hasConnection(PointId, PointId) const;
         const std::string& nameOf(PointId) const;
         PointId idOf(std::string_view) const;
+        Point& valueOf(std::string_view);
+        const Point& valueOf(std::string_view) const;
+        Point& valueOf(PointId);
+        const Point& valueOf(PointId) const;
         bool contains(PointId) const noexcept;
         bool contains(std::string_view) const noexcept;
         std::size_t size() const;
         bool empty() const noexcept;
         void clear() noexcept;
-        
+
         // CarPath findCarPath() const;
         // PedestrianPath findPedestrianPath() const;
+        std::string describe(const Path&, const char*) const;
+        bool isValid(const Path&) const noexcept;
 
     protected:
         struct PointData {
@@ -56,9 +61,9 @@ namespace citymap
         };
 
     private:
-        PointId nextId_ { };
+        PointId nextId_ {};
         std::unordered_map<PointId, PointData> points_;
         std::unordered_map<std::string_view, PointId> nameIndex_;
     };
-    
+
 }  // namespace citymap
