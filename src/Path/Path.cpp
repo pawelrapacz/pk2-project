@@ -3,43 +3,47 @@ using namespace citymap;
 
 // Path
 
-Path::Path(double distance, const PointList& list)
-    : distance_(distance), pathPoints_(list) {}
-
-const Path::PointList& Path::getPathPoints() const noexcept {
-    return pathPoints_;
-}
-
-double Path::getDistance() const noexcept {
-    return distance_;
-}
+Path::Path(double d, std::initializer_list<PointId> pts)
+    : distance_(d), points_(pts) {}
 
 Path::operator double() const noexcept {
     return distance_;
 }
 
-// PedestrianPath
-
-PedestrianPath::PedestrianPath(double distance, const PointList& list)
-    : Path(distance, list) {}
-
-constexpr PathType PedestrianPath::pathType() const noexcept {
-    return PathType::Pedestrian;
+Path::operator const Path::PointList&() const noexcept {
+    return points_;
 }
 
-constexpr std::string PedestrianPath::describe() const noexcept {
-    return std::string();
+double Path::distance() const noexcept {
+    return distance_;
+}
+
+const Path::PointList& Path::points() const noexcept {
+    return points_;
+}
+
+PointId Path::from() const noexcept {
+    return points_.front();
+}
+
+PointId Path::to() const noexcept {
+    return points_.back();
+}
+
+// PedestrianPath
+
+PedestrianPath::PedestrianPath(double d, std::initializer_list<PointId> pts)
+    : Path(d, pts) {}
+
+constexpr PathType PedestrianPath::type() const noexcept {
+    return PathType::Pedestrian;
 }
 
 // CarPath
 
-CarPath::CarPath(double distance, const PointList& list)
-    : Path(distance, list) {}
+CarPath::CarPath(double d, std::initializer_list<PointId> pts)
+    : Path(d, pts) {}
 
-constexpr PathType CarPath::pathType() const noexcept {
+constexpr PathType CarPath::type() const noexcept {
     return PathType::Car;
-}
-
-constexpr std::string CarPath::describe() const noexcept {
-    return std::string();
 }

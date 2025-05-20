@@ -1,7 +1,11 @@
 #pragma once
 
+#include <initializer_list>
+#include <memory>
 #include <string>
 #include <vector>
+
+#include "Point.h"
 
 namespace citymap
 {
@@ -10,44 +14,46 @@ namespace citymap
 
     class Path {
     public:
-        using PointList = std::vector<std::string>;
+        using PointList = std::vector<PointId>;
 
-    public:
-        Path(double, const PointList&);
-
+        Path() = default;
+        Path(double, std::initializer_list<PointId>);
         virtual ~Path() = default;
 
-        virtual std::string describe() const = 0;
-
-        virtual constexpr PathType pathType() const noexcept = 0;
-
-        const PointList& getPathPoints() const noexcept;
-
-        double getDistance() const noexcept;
-
         operator double() const noexcept;
+        operator const PointList&() const noexcept;
+        double distance() const noexcept;
+        const PointList& points() const noexcept;
+        PointId from() const noexcept;
+        PointId to() const noexcept;
+
+        virtual constexpr PathType type() const noexcept = 0;
 
     private:
         double distance_;
-        PointList pathPoints_;
+        PointList points_;
+
+        friend class Map;
     };
+
+    using PolymorphicPathList = std::vector<std::unique_ptr<Path>>;
 
     class PedestrianPath final : public Path {
     public:
-        PedestrianPath(double, const PointList&);
+        PedestrianPath() = default;
+        PedestrianPath(double, std::initializer_list<PointId>);
         ~PedestrianPath() override = default;
 
-        constexpr PathType pathType() const noexcept override;
-        constexpr std::string describe() const noexcept override;
+        constexpr PathType type() const noexcept override;
     };
 
     class CarPath final : public Path {
     public:
-        CarPath(double, const PointList&);
+        CarPath() = default;
+        CarPath(double, std::initializer_list<PointId>);
         ~CarPath() override = default;
 
-        constexpr PathType pathType() const noexcept override;
-        constexpr std::string describe() const noexcept override;
+        constexpr PathType type() const noexcept override;
     };
 
 }  // namespace citymap
