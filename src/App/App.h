@@ -3,6 +3,7 @@
 #include <filesystem>
 
 #include "Map.h"
+#include "Path.h"
 #include "clipper.hpp"
 
 namespace citymap
@@ -33,6 +34,7 @@ namespace citymap
         CLI::clipper cli_;
         CliOptions options_;
         Map map_;
+        PolymorphicPathList foundPaths_;
     };
 
 }  // namespace citymap

@@ -1,11 +1,11 @@
 #pragma once
 
 #include <filesystem>
-#include <vector>
 #include <string>
-
+#include <vector>
 
 #include "Map.h"
+#include "Path.h"
 
 namespace citymap
 {
@@ -20,7 +20,7 @@ namespace citymap
         void loadCoordinates(FilePathRef, Map&);
         void loadConnections(FilePathRef, Map&);
         // void loadQueries(FilePathRef);
-        // void writeOutput(FilePathRef);
+        void writeOutput(FilePathRef, const Map&, const PolymorphicPathList&);
         bool fail() const noexcept;
         const std::vector<std::string>& errorList() const noexcept;
 

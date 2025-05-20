@@ -1,5 +1,6 @@
 #include "FileHandler.h"
 
+#include <algorithm>
 #include <fstream>
 
 using namespace citymap;
@@ -32,9 +33,22 @@ void FileHandler::loadConnections(FilePathRef path, Map& map) {
 
 // void citymap::FileHandler::loadQueries(FilePathRef path) {}
 
-// void citymap::FileHandler::writeOutput(FilePathRef path) {}
+void FileHandler::writeOutput(FilePathRef filePath, const Map& map,
+                              const PolymorphicPathList& paths) {
+    std::ofstream file(filePath);
+    if (!file) return;
+    std::ranges::for_each(paths, [&map, &file](auto& path) {
+        if (path->type() == PathType::Pedestrian)
+            file << "Pedestrian route: ";
+        else
+            file << "Car route: ";
 
-// void FileHandler::writeOutput(FilePathRef, const PolymorphicPathList&) {}
+        file << map.nameOf(path->from()) << " -> " << map.nameOf(path->to()) << ": ";
+        file << path->distance() << "\n";
+        file << map.describe(*path, " -> ");
+    });
+    file.close();
+}
 
 bool FileHandler::fail() const noexcept {
     return err_.size();
