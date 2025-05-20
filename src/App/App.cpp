@@ -49,8 +49,8 @@ void App::run() {
 
 void App::loadInputs() {
     FileHandler fh;
-    fh.loadCoordinates(options_.coordsFile, graph_);
-    fh.loadConnections(options_.connectFile, graph_);
+    fh.loadCoordinates(options_.coordsFile, map_);
+    fh.loadConnections(options_.connectFile, map_);
     // fh.loadQueries(options_.queriesFile);
 }
 

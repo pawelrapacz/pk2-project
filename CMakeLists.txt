@@ -27,8 +27,9 @@ add_executable(${PROJECT_NAME}
     src/FileHandler/FileHandler.cpp
     src/FileHandler/FileHandler.h
 
-    src/CityGraph/Point.h
-    src/CityGraph/CityGraph.h
+    src/Map/Point.h
+    src/Map/Map.h
+    src/Map/Map.cpp
 
     src/Path/Path.h
     src/Path/Path.cpp
@@ -46,7 +47,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     src/App/
     src/Path/
     src/FileHandler/
-    src/CityGraph/
+    src/Map/
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE

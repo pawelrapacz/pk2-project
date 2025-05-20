@@ -4,8 +4,8 @@
 #include <vector>
 #include <string>
 
-#include "App.h"
-#include "CityGraph.h"
+
+#include "Map.h"
 
 namespace citymap
 {
@@ -17,8 +17,8 @@ namespace citymap
         FileHandler() = default;
         ~FileHandler() = default;
 
-        void loadCoordinates(FilePathRef, CityGraph&);
-        void loadConnections(FilePathRef, CityGraph&);
+        void loadCoordinates(FilePathRef, Map&);
+        void loadConnections(FilePathRef, Map&);
         // void loadQueries(FilePathRef);
         // void writeOutput(FilePathRef);
         bool fail() const noexcept;

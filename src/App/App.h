@@ -2,7 +2,7 @@
 
 #include <filesystem>
 
-#include "CityGraph.h"
+#include "Map.h"
 #include "clipper.hpp"
 
 namespace citymap
@@ -32,7 +32,7 @@ namespace citymap
         const CLI::args argv_;
         CLI::clipper cli_;
         CliOptions options_;
-        CityGraph graph_;
+        Map map_;
     };
 
 }  // namespace citymap
