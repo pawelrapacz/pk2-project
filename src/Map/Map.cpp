@@ -6,8 +6,8 @@ using namespace citymap;
 
 PointId Map::addPoint(std::string_view name, Point val) {
     auto id = nextId_++;
-    if (points_.try_emplace(id, name, val).second) {
-        nameIndex_.emplace(name, id);
+    if (auto [it, success] = points_.try_emplace(id, name, val); success) {
+        nameIndex_.emplace(it->second.name, id);
         return id;
     }
     else
@@ -15,13 +15,8 @@ PointId Map::addPoint(std::string_view name, Point val) {
 }
 
 PointId Map::addPoint(PointId id, std::string_view name, Point val) {
-    if (points_.try_emplace(id, name, val).second) {
-        nameIndex_.emplace(name, id);
-        if (nextId_ <= id) nextId_ = id + 1;
-        return id;
-    }
-    else
-        return npnt;
+    if (id > nextId_) nextId_ = id;
+    return addPoint(name, val);
 }
 
 void Map::removePoint(std::string_view name) {
@@ -109,11 +104,11 @@ void Map::clear() noexcept {
     nextId_ = 0;
 }
 
-std::string Map::describe(const Path& path, const char* sep = ", ") const {
+std::string Map::describe(const Path::PointList& pl, const char* sep = ", ") const {
     std::string output;
-    for (std::size_t i = 0; i < path.points_.size() - 1; i++)
-        output += points_.at(i).name + sep;
-    output += points_.at(path.to()).name;
+    for (std::size_t i = 0; i < pl.size() - 1; i++)
+        output += points_.at(pl[i]).name + sep;
+    output += points_.at(pl.back()).name;
     return output;
 }
 

@@ -43,7 +43,7 @@ namespace citymap
 
         // CarPath findCarPath() const;
         // PedestrianPath findPedestrianPath() const;
-        std::string describe(const Path&, const char*) const;
+        std::string describe(const Path::PointList&, const char*) const;
         bool isValid(const Path&) const noexcept;
 
     protected:
