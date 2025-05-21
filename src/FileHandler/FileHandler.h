@@ -11,10 +11,11 @@ namespace citymap
 {
 
     class FileHandler {
-        using FilePath     = std::filesystem::path;
-        using FilePathRef     = const std::filesystem::path&;
+        using FilePath    = std::filesystem::path;
+        using FilePathRef = const std::filesystem::path&;
+
     public:
-        FileHandler() = default;
+        FileHandler()  = default;
         ~FileHandler() = default;
 
         void loadCoordinates(FilePathRef, Map&);
@@ -22,10 +23,12 @@ namespace citymap
         // void loadQueries(FilePathRef);
         void writeOutput(FilePathRef, const Map&, const PolymorphicPathList&);
         bool fail() const noexcept;
-        const std::vector<std::string>& errorList() const noexcept;
+        void clear() noexcept;
+        const std::string& error() const noexcept;
 
     private:
-        std::vector<std::string> err_;
+        std::string err_;
+        PointId firstMapId_ {};
     };
 
 }  // namespace citymap
