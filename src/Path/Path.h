@@ -44,7 +44,7 @@ namespace citymap
         PedestrianPath(double, std::initializer_list<PointId>);
         ~PedestrianPath() override = default;
 
-        constexpr PathType type() const noexcept override;
+        constexpr PathType type() const noexcept override { return PathType::Pedestrian; }
     };
 
     class CarPath final : public Path {
@@ -53,7 +53,7 @@ namespace citymap
         CarPath(double, std::initializer_list<PointId>);
         ~CarPath() override = default;
 
-        constexpr PathType type() const noexcept override;
+        constexpr PathType type() const noexcept override { return PathType::Car; }
     };
 
 }  // namespace citymap

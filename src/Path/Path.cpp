@@ -35,15 +35,7 @@ PointId Path::to() const noexcept {
 PedestrianPath::PedestrianPath(double d, std::initializer_list<PointId> pts)
     : Path(d, pts) {}
 
-constexpr PathType PedestrianPath::type() const noexcept {
-    return PathType::Pedestrian;
-}
-
 // CarPath
 
 CarPath::CarPath(double d, std::initializer_list<PointId> pts)
     : Path(d, pts) {}
-
-constexpr PathType CarPath::type() const noexcept {
-    return PathType::Car;
-}
