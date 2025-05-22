@@ -27,6 +27,7 @@ namespace citymap
         PointId from() const noexcept;
         PointId to() const noexcept;
 
+        virtual constexpr operator PathType() const noexcept = 0;
         virtual constexpr PathType type() const noexcept = 0;
 
     private:
@@ -44,6 +45,7 @@ namespace citymap
         PedestrianPath(double, std::initializer_list<PointId>);
         ~PedestrianPath() override = default;
 
+        constexpr operator PathType() const noexcept override { return type(); }
         constexpr PathType type() const noexcept override { return PathType::Pedestrian; }
     };
 
@@ -53,6 +55,7 @@ namespace citymap
         CarPath(double, std::initializer_list<PointId>);
         ~CarPath() override = default;
 
+        constexpr operator PathType() const noexcept override { return type(); }
         constexpr PathType type() const noexcept override { return PathType::Car; }
     };
 
