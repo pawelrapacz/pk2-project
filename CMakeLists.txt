@@ -33,6 +33,9 @@ add_executable(${PROJECT_NAME}
 
     src/Path/Path.h
     src/Path/Path.cpp
+
+    src/Query/Query.h
+    src/Query/Query.cpp
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -46,6 +49,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     src/
     src/App/
     src/Path/
+    src/Query/
     src/FileHandler/
     src/Map/
 )
