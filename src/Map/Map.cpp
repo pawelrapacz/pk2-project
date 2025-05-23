@@ -15,8 +15,13 @@ PointId Map::addPoint(std::string_view name, Point val) {
 }
 
 PointId Map::addPoint(PointId id, std::string_view name, Point val) {
-    if (id > nextId_) nextId_ = id;
-    return addPoint(name, val);
+    if (id > nextId_) nextId_ = id + 1;
+    if (auto [it, success] = points_.try_emplace(id, name, val); success) {
+        nameIndex_.emplace(it->second.name, id);
+        return id;
+    }
+    else
+        return npnt;
 }
 
 void Map::removePoint(std::string_view name) {
