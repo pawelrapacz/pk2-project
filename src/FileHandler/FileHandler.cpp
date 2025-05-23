@@ -1,21 +1,35 @@
 #include "FileHandler.h"
 
 #include <algorithm>
+#include <cctype>
+#include <charconv>
 #include <fstream>
+#include <limits>
 
 using namespace citymap;
 
 void FileHandler::loadCoordinates(FilePathRef path, Map& map) {
-    if (fail()) return;
     std::ifstream file(path);
+    setFirstMapId(file);
+    if (fail()) return;
+
+    std::size_t lineCount {};
     int id, x, y;
     std::string name;
 
-    while (file >> id >> name >> x >> y)
-        map.addPoint(id, name, {x, y});
-    file.seekg(std::ios::beg);
-    file >> firstMapId_;
-    if (file) err_ = "An error occured while reading file: " + path.string();
+    while (file >> id >> name >> x >> y) {
+        lineCount++;
+        idSequence_.push_back(id);
+        if (Map::npnt == map.addPoint(id, name, {x, y})) {
+            err_ = "An error occured while reading file: " + path.string()
+                   + "\n Invalid or missing parameter(s) on line: " + std::to_string(lineCount);
+            break;
+        }
+
+        // skip whitespace
+        file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        if (file.eof()) break;
+    }
     file.close();
 }
 
@@ -24,19 +38,42 @@ void FileHandler::loadConnections(FilePathRef path, Map& map) {
     std::ifstream file(path);
     bool hasConnection;
 
-    for (std::size_t i = firstMapId_; !file.eof(); i++) {
-        for (std::size_t j = firstMapId_; j < map.size() + firstMapId_; j++) {
+    for (auto i : idSequence_) {
+        // skip whitespace, but don't exit on eof,
+        // because the loop will automatically end when the whole matrix is read,
+        // if any value is mising it will fail
+        file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        for (auto j : idSequence_) {
             file >> hasConnection;
             if (hasConnection) map.addConnection(i, j);
         }
     }
-    if (file) err_ = "An error occured while reading file: " + path.string();
+
+    if (!file) err_ = "An error occured while reading file: " + path.string();
     file.close();
 }
 
-// void citymap::FileHandler::loadQueries(FilePathRef path) {}
+void FileHandler::loadQueries(FilePathRef path, std::vector<UnifiedQuery>& queries, PathType type,
+                              const Map& map) {
+    if (fail()) return;
+    std::ifstream file(path);
+    std::string from, to;
+    while (file >> from >> to) {
+        if (!validateQueryPoints(from, to, map))
+            break;
+        else
+            queries.emplace_back(from, to, map, type);
 
-void FileHandler::writeOutput(FilePathRef path, const Map& map, const PolymorphicPathList& paths) {
+        // skip whitespace
+        file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        if (file.eof()) break;
+    }
+
+    if (!file) err_ = "An error occured while reading file: " + path.string();
+    file.close();
+}
+
+void FileHandler::writeOutput(FilePathRef path, const PolymorphicPathList& paths, const Map& map) {
     if (fail()) return;
     std::ofstream file(path);
 
@@ -50,7 +87,7 @@ void FileHandler::writeOutput(FilePathRef path, const Map& map, const Polymorphi
         file << pptr->distance() << "\n";
         file << map.describe(*pptr, " -> ");
     });
-    if (file) err_ = "An error occured while writing to file: " + path.string();
+    if (!file) err_ = "An error occured while writing to file: " + path.string();
     file.close();
 }
 
@@ -64,4 +101,36 @@ void FileHandler::clear() noexcept {
 
 const std::string& FileHandler::error() const noexcept {
     return err_;
+}
+
+bool FileHandler::validateQueryPoints(const std::string& from, const std::string& to,
+                                      const Map& map) noexcept {
+    if (!map.contains(from)) {
+        err_ = "An error occured while reading file, key: " + from + " does not exist.";
+        return false;
+    }
+    else if (!map.contains(to)) {
+        err_ = "An error occured while reading file, key: " + to + " does not exist.";
+        return false;
+    }
+    return true;
+}
+
+void FileHandler::setFirstMapId(std::ifstream& s) {
+    std::size_t count {};
+    std::string id;
+    do {
+        id += s.get();
+        count++;
+    } while (std::isdigit(id.back()));
+
+    while (count) {
+        count--;
+        s.unget();
+    }
+
+    if (std::from_chars(id.data(), id.data() + id.length(), firstMapId_).ec != std::errc {})
+        err_ = "Could not succesfully parse first id.";
+
+    s.seekg(std::ios::beg);
 }

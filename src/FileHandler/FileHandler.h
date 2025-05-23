@@ -6,6 +6,7 @@
 
 #include "Map.h"
 #include "Path.h"
+#include "Query.h"
 
 namespace citymap
 {
@@ -20,15 +21,19 @@ namespace citymap
 
         void loadCoordinates(FilePathRef, Map&);
         void loadConnections(FilePathRef, Map&);
-        // void loadQueries(FilePathRef);
-        void writeOutput(FilePathRef, const Map&, const PolymorphicPathList&);
+        void loadQueries(FilePathRef, std::vector<UnifiedQuery>&, PathType, const Map&);
+        void writeOutput(FilePathRef, const PolymorphicPathList&, const Map&);
         bool fail() const noexcept;
         void clear() noexcept;
         const std::string& error() const noexcept;
 
     private:
+        bool validateQueryPoints(const std::string&, const std::string&, const Map&) noexcept;
+        void setFirstMapId(std::ifstream&);
+
         std::string err_;
         PointId firstMapId_ {};
+        std::vector<PointId> idSequence_;
     };
 
 }  // namespace citymap
