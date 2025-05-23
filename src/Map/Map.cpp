@@ -44,7 +44,8 @@ void Map::addConnection(std::string_view a, std::string_view b) {
 }
 
 void Map::addConnection(PointId a, PointId b) {
-    points_.at(a).connections.insert(b);
+    if (a != b)
+        points_.at(a).connections.insert(b);
 }
 
 void Map::removeConnection(std::string_view a, std::string_view b) {
