@@ -75,6 +75,10 @@ namespace citymap
         PathType type() const noexcept;
         operator Query&();
         operator const Query&() const;
+        operator PedestrianQuery&();
+        operator const PedestrianQuery&() const;
+        operator CarQuery&();
+        operator const CarQuery&() const;
         operator PathType() const noexcept;
         UnifiedQuery& operator=(const Query&);
         UnifiedQuery& operator=(const UnifiedQuery&) noexcept;
