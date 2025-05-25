@@ -2,5 +2,5 @@
 2 Apteka 10 12
 3 Policja 6 7
 4 Sklep 11 5
-5 Szkola 1 1
+5 Szkoła 1 1
 6 Szpital 14 0
