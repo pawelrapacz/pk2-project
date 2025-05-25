@@ -64,11 +64,15 @@ target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror 
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE
     <type_traits>
+    <stdexcept>
+    <functional>
+    <limits>
     <initializer_list>
     <memory>
     <vector>
     <unordered_map>
     <unordered_set>
+    <queue>
     <utility>
     <filesystem>
     <algorithm>
@@ -78,4 +82,5 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE
     <cstddef>
     <cstdint>
     <cstring>
+    <cctype>
 )
