@@ -1,6 +1,10 @@
 .vscode/
 *.pdf
-[Bb]uild/
+[Bb]uild*/
+[Dd]bug*/
+
+testdata/out*
+testdata/output*
 
 [Dd][Oo][Cc][Ss]/*
 ![Dd][Oo][Cc][Ss]/[Dd]oxyfile
