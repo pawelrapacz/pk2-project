@@ -7,8 +7,21 @@ namespace metrics
         int x, y;
     };
 
-    inline double euclidean(Point2, Point2);
+    struct Point3 {
+        int x, y, z;
+    };
 
-    inline double manhattan(Point2, Point2);
+    using Metric2 = double (*)(Point2, Point2);
+
+    using Metric3 = double (*)(Point3, Point3);
+
+    using Metric = Metric2;
+
+
+    double euclidean(Point2, Point2);
+    double manhattan(Point2, Point2);
+
+    double euclidean(Point3, Point3);
+    double manhattan(Point3, Point3);
 
 }  // namespace metrics
