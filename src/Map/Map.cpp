@@ -1,6 +1,7 @@
 #include "Map.h"
 
 #include <algorithm>
+#include <queue>
 
 using namespace citymap;
 
@@ -44,8 +45,7 @@ void Map::addConnection(std::string_view a, std::string_view b) {
 }
 
 void Map::addConnection(PointId a, PointId b) {
-    if (a != b)
-        points_.at(a).connections.insert(b);
+    if (a != b) points_.at(a).connections.insert(b);
 }
 
 void Map::removeConnection(std::string_view a, std::string_view b) {
@@ -72,19 +72,19 @@ PointId Map::idOf(std::string_view name) const {
     return nameIndex_.at(name);
 }
 
-Point& citymap::Map::valueOf(std::string_view name) {
+Point& Map::valueOf(std::string_view name) {
     return valueOf(idOf(name));
 }
 
-const Point& citymap::Map::valueOf(std::string_view name) const {
+const Point& Map::valueOf(std::string_view name) const {
     return valueOf(idOf(name));
 }
 
-Point& citymap::Map::valueOf(PointId id) {
+Point& Map::valueOf(PointId id) {
     return points_.at(id).val;
 }
 
-const Point& citymap::Map::valueOf(PointId id) const {
+const Point& Map::valueOf(PointId id) const {
     return points_.at(id).val;
 }
 
@@ -110,7 +110,29 @@ void Map::clear() noexcept {
     nextId_ = 0;
 }
 
+std::unique_ptr<Path> Map::findPath(const Query& query) const {
+    if (query.type() == PathType::Pedestrian)
+        return std::make_unique<PedestrianPath>(
+            findPedestrianPath(static_cast<const PedestrianQuery&>(query)));
+    else
+        return std::make_unique<CarPath>(findCarPath(static_cast<const CarQuery&>(query)));
+}
+
+CarPath Map::findCarPath(CarQuery query) const {
+    CarPath path;
+    findPath(query.from(), query.to(), dijkstra(query.from(), metrics::manhattan), path);
+    return path;
+}
+
+PedestrianPath Map::findPedestrianPath(PedestrianQuery query) const {
+    PedestrianPath path;
+    findPath(query.from(), query.to(), dijkstra(query.from(), metrics::euclidean), path);
+    return path;
+}
+
 std::string Map::describe(const Path::PointList& pl, const char* sep = ", ") const {
+    if (pl.empty()) return std::string();
+
     std::string output;
     for (std::size_t i = 0; i < pl.size() - 1; i++)
         output += points_.at(pl[i]).name + sep;
@@ -124,4 +146,52 @@ bool Map::isValid(const Path& path) const noexcept {
     for (Iter it = path.points_.begin(); it < path.points_.end() - 1; it++)
         if (!hasConnection(*it, *(it + 1))) return false;
     return true;
+}
+
+Map::DijkstraResult Map::dijkstra(PointId start, metrics::Metric metric) const {
+    DijkstraResult result;
+    for (auto& [key, val] : points_)
+        result[key];
+
+    auto compFunc = [&result](PointId a, PointId b) -> bool {
+        return result[a].distance < result[b].distance;
+    };
+
+    std::priority_queue<PointId, std::vector<PointId>, decltype(compFunc)> queue(compFunc);
+    std::unordered_set<PointId> visited;
+    visited.reserve(size());
+
+    result[start] = {0, start};
+    queue.push(start);
+
+    while (!queue.empty()) {
+        PointId currentPoint = queue.top();
+        queue.pop();
+        double currentDistance = result[currentPoint].distance;
+        visited.insert(currentPoint);
+
+        for (auto& neighbour : points_.at(currentPoint).connections) {
+            double newDistance
+                = currentDistance + metric(valueOf(currentPoint), valueOf(neighbour));
+            if (newDistance < result[neighbour].distance) {
+                result[neighbour] = {newDistance, currentPoint};
+                queue.push(neighbour);
+            }
+        }
+    }
+
+    return result;
+}
+
+void Map::findPath(PointId from, PointId to, const DijkstraResult& dj, Path& path) {
+    path.distance_ = dj.at(to).distance;
+
+    PointId currentPoint = to;
+    while (currentPoint != from) {
+        path.points_.push_back(currentPoint);
+        currentPoint = dj.at(currentPoint).previous;
+    }
+    path.points_.push_back(from);
+
+    std::ranges::reverse(path.points_);
 }

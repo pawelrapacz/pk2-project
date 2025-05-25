@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstddef>
+#include <limits>
+#include <memory>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -8,6 +10,8 @@
 
 #include "Path.h"
 #include "Point.h"
+#include "Query.h"
+#include "metrics.h"
 
 namespace citymap
 {
@@ -41,8 +45,10 @@ namespace citymap
         bool empty() const noexcept;
         void clear() noexcept;
 
-        // CarPath findCarPath() const;
-        // PedestrianPath findPedestrianPath() const;
+
+        std::unique_ptr<Path> findPath(const Query&) const;
+        CarPath findCarPath(CarQuery) const;
+        PedestrianPath findPedestrianPath(PedestrianQuery) const;
         std::string describe(const Path::PointList&, const char*) const;
         bool isValid(const Path&) const noexcept;
 
@@ -59,6 +65,16 @@ namespace citymap
             Point val;
             std::unordered_set<PointId> connections;
         };
+
+        struct DijkstraData {
+            double distance  = std::numeric_limits<double>::infinity();
+            PointId previous = npnt;
+        };
+
+        using DijkstraResult = std::unordered_map<PointId, DijkstraData>;
+
+        DijkstraResult dijkstra(PointId, metrics::Metric) const;
+        static void findPath(PointId, PointId, const DijkstraResult&, Path&);
 
     private:
         PointId nextId_ {};
