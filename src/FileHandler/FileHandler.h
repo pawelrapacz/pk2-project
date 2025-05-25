@@ -30,6 +30,7 @@ namespace citymap
     private:
         bool validateQueryPoints(const std::string&, const std::string&, const Map&) noexcept;
         void setFirstMapId(std::ifstream&);
+        bool checkInputFile(FilePathRef);
 
         std::string err_;
         PointId firstMapId_ {};
