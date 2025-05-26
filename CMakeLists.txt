@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.0.1)
+cmake_minimum_required(VERSION 3.28.3)
 project(citymap VERSION 1.0.0
                    DESCRIPTION "pk-project"
                    LANGUAGES CXX)
