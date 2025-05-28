@@ -158,8 +158,6 @@ Map::DijkstraResult Map::dijkstra(PointId start, metrics::Metric metric) const {
     };
 
     std::priority_queue<PointId, std::vector<PointId>, decltype(compFunc)> queue(compFunc);
-    std::unordered_set<PointId> visited;
-    visited.reserve(size());
 
     result[start] = {0, start};
     queue.push(start);
@@ -168,7 +166,6 @@ Map::DijkstraResult Map::dijkstra(PointId start, metrics::Metric metric) const {
         PointId currentPoint = queue.top();
         queue.pop();
         double currentDistance = result[currentPoint].distance;
-        visited.insert(currentPoint);
 
         for (auto& neighbour : points_.at(currentPoint).connections) {
             double newDistance
