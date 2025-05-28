@@ -11,7 +11,6 @@ using namespace citymap;
 
 void FileHandler::loadCoordinates(FilePathRef path, Map& map) {
     std::ifstream file(path);
-    setFirstMapId(file);
     if (fail() || !checkInputFile(path)) return;
 
     std::size_t lineCount {};
@@ -112,25 +111,6 @@ bool FileHandler::validateQueryPoints(const std::string& from, const std::string
     }
     else
         return true;
-}
-
-void FileHandler::setFirstMapId(std::ifstream& s) {
-    std::size_t count {};
-    std::string id;
-    do {
-        id += s.get();
-        count++;
-    } while (std::isdigit(id.back()));
-
-    while (count) {
-        count--;
-        s.unget();
-    }
-
-    if (std::from_chars(id.data(), id.data() + id.length(), firstMapId_).ec != std::errc {})
-        err_ = "Could not succesfully parse first id.";
-
-    s.seekg(std::ios::beg);
 }
 
 bool FileHandler::checkInputFile(FilePathRef path) {
